@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "Julian Novak",
+    "SSN": 499982,
+    "Perscription": [
+      "Tiramina (Alimentos, Etc.)",
+      "Ácido Mefenâmico",
+      "Metotrexato",
+      "Fenfluramina"
+    ],
+    "Danger": 13
+  },
+  {
+    "Name": "Olivia Martinez",
+    "SSN": 896466,
+    "Perscription": [
+      "Ácido Mefenâmico",
+      "Digoxina",
+      "Furosemida",
+      "Clonidina"
+    ],
+    "Danger": 25
+  }
+]
