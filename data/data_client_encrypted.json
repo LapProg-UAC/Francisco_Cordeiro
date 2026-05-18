@@ -1,12 +1,12 @@
 {
-  "Name": "Samuel Brooks",
-  "SSN": 776123,
-  "Perscription": [
-    "Griseofulvina",
+  "Name": "Samuel Martinez",
+  "SSN": "212255",
+  "Prescription": [
+    "Procainamida",
     "Naproxeno",
-    "Antidepressivos Tricíclicos",
-    "Fenotiazinas (Clorpromazina)",
-    "Clofibrato"
+    "Guanetidina",
+    "Insulinas",
+    "Tiazidas"
   ],
-  "Danger": 43
+  "Danger": 35
 }

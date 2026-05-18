@@ -1,108 +1,120 @@
-import random
-import json
-from perscription import generate_prescription
+import random, sys
+from encrypt import write_json
+from prescription import generate_prescription
+from generate_matrix import create_list
 
 
-def create_name_list(first_name_list:str) -> list:
+def load_name_list(first_name_filename:str, encode:str) -> list:
     """
-    Creates a list of first names from the list given
-    :param first_name_list: file name of the list of first names
+    Load a list of first names from a file.
+
+    :param first_name_filename: Path to the file containing first names.
+    :type first_name_filename: str
+    :param encode: File encoding to use when reading the file.
+    :type encode: str
+    :return: A list of first names.
+    :rtype: list
+    """
+    return create_list(first_name_filename, encode)
+
+def load_surname_list(surname_filename:str,encode:str) -> list:
+    """
+    Load a list of surnames from a file.
+
+    :param surname_filename: Path to the file containing surnames.
+    :type surname_filename: str
+    :param encode: File encoding to use when reading the file.
+    :type encode: str
+    :return: A list of surnames.
+    :rtype: list
+    """
+    return create_list(surname_filename, encode)
+
+def create_full_name(first_name_list:list, surname_list:list) -> str:
+    """
+    Create a random full name using a first name and surname.
+
+    :param first_name_list: List of available first names.
     :type first_name_list: list
-    :return: list of first names
-    :rtype: list
-    """
-    with open(first_name_list, "r") as file:
-        return file.read().splitlines()
-
-def create_surname_list(surname_list:str) -> list:
-    """
-    Creates a list of surnames from the list given
-    :param surname_list: file name of the list of surnames
+    :param surname_list: List of available surnames.
     :type surname_list: list
-    :return: list of surnames
-    :rtype: list
-    """
-    with open(surname_list, "r") as file:
-        return file.read().splitlines()
-
-def create_full_name(fn:list, sn:list) -> str:
-    """
-    Creates a full name from the list given
-    :param fn: first name list
-    :type fn: list
-    :param sn: surname list
-    :type sn: list
-    :return: full name
+    :returns: A randomly generated full name.
     :rtype: str
     """
-    name_random = random.randint(0, len(fn) - 1)
-    surname_random = random.randint(0, len(sn) - 1)
-    full_name = fn[name_random] + ' ' + sn[surname_random]
-    return full_name
+    return (random.choice(first_name_list) + ' ' + random.choice(surname_list))
 
-def user_number() -> int:
+def generate_ssn(min_ssn_value:int, max_ssn_value:int) -> str:
     """
-    Creates a Social Security Number (SSN) at random
-    :return: random SSN
-    :rtype: int
+    Generate a random Social Security Number within a range.
+
+    :param min_ssn_value: Minimum allowed SSN value.
+    :type min_ssn_value: int
+    :param max_ssn_value: Maximum allowed SSN value.
+    :type max_ssn_value: int
+    :return: A randomly generated SSN.
+    :rtype: str
+    :raises SystemExit: If 'min_ssn_value' is greater than 'max_ssn_value'.
     """
-    return random.randint(1000, 1000000)
+    if min_ssn_value > max_ssn_value:
+        sys.exit('"min_ssn_value" must be smaller than "max_ssn_value"')
+    return str(random.randint(min_ssn_value, max_ssn_value))
 
-def client_info():
+def generate_client_info(data:list) -> tuple:
     """
-    Creates client info (first name list, surname list, SSN)
-    :return: full name, SSN
-    :rtype: str, int
+    Generate client information including full name and SSN.
+
+    :param data: Configuration and data source list used for generation.
+    :type data: list
+    :returns: A tuple containing the client's full name and SSN.
+    :rtype: tuple
     """
-    first_name = create_name_list("data/first_name.txt")
-    surname = create_surname_list("data/surname.txt")
-    number = user_number()
-    return create_full_name(first_name, surname), number
+    return (create_full_name(load_name_list(data[0], data[13]), load_surname_list(data[1], data[13])),
+            generate_ssn(data[8], data[9]))
 
-def create_one_client():
+def create_one_client(data:list) -> dict:
     """
-    Creates a json file with the information of one client, with perscription info
-    :return: None
+    Create a single client record and write it to a JSON file.
+
+    :param data: Configuration and data source list used for generation.
+    :type data: list
+    :returns: A dictionary containing the generated client information.
+    :rtype: dict
     """
-    name, ssn = client_info()
-    medicine, danger = generate_prescription()
+    name, ssn = generate_client_info(data)
+    medicine, danger = generate_prescription(data)
 
-    client = {
-        "Name": name,
-        "SSN": ssn,
-        "Perscription": medicine,
-        "Danger": danger
-    }
+    client = {"Name": name,
+              "SSN": ssn,
+              "Prescription": medicine,
+              "Danger": danger}
 
-    print(json.dumps(client, ensure_ascii=False, indent=2))
+    write_json(data[2], client, data[13], data[14])
+    return client
 
-    with open("data/data_client.json", "w") as file:
-        json.dump(client, file, ensure_ascii=False, indent=2)
-
-def create_several_clients(amount: int):
+def create_several_clients(number_of_clients:int, data:list) -> dict:
     """
-    Creates a json file with the information of several clients
-    :param amount: number of clients
-    :type amount: int
-    :return: None
+    Create multiple client records and write them to a JSON file.
+
+    :param number_of_clients: Number of clients to generate.
+    :type number_of_clients: int
+    :param data: Configuration and data source list used for generation.
+    :type data: list
+    :returns: A dictionary containing all generated clients.
+    :rtype: dict
     """
-    clients = []
+    clients = {}
 
-    for _ in range(amount):
-        name, ssn = client_info()
-        medicine, danger = generate_prescription()
+    for i in range(number_of_clients):
+        name, ssn = generate_client_info(data)
+        medicine, danger = generate_prescription(data)
 
-        client = {
-            "Name": name,
-            "SSN": ssn,
-            "Perscription": medicine,
-            "Danger": danger
-        }
+        client = {"Name": name,
+                  "SSN": ssn,
+                  "Prescription": medicine,
+                  "Danger": danger}
 
-        clients.append(client)
+        clients[f'Client #{i + 1}'] = client
 
-    print(json.dumps(clients, ensure_ascii=False, indent=2))
-
-    with open("data/data_more_clients.json", "w") as file:
-        json.dump(clients, file, ensure_ascii=False, indent=2)
+    write_json(data[3], clients, data[13], data[14])
+    return clients
 

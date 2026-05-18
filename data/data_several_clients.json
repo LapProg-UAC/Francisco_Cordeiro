@@ -1,0 +1,25 @@
+{
+  "Client #1": {
+    "Name": "Olivia Alvarez",
+    "SSN": "313101",
+    "Prescription": [
+      "Meprobamato",
+      "Tiazidas",
+      "Colestiramina",
+      "Sulfimpirazona"
+    ],
+    "Danger": 18
+  },
+  "Client #2": {
+    "Name": "Aria Alvarez",
+    "SSN": "402086",
+    "Prescription": [
+      "Metronidazol",
+      "Meprobamato",
+      "Piridoxina",
+      "Tiazidas",
+      "Anticolinérgicos"
+    ],
+    "Danger": 35
+  }
+}

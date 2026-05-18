@@ -3,10 +3,11 @@ from create_client import create_one_client, create_several_clients
 
 invalid = '\nPlease enter a valid number'
 
-def menu():
+def menu() -> str:
     """
-    Prints a menu for user interface and asks the user to input an option
-    :return: option chosen by user
+    Display the main menu and get the user's option.
+
+    :returns: The selected menu option.
     :rtype: str
     """
     print('\nWelcome')
@@ -16,50 +17,118 @@ def menu():
     num = input('\nWhat would you like to do? ')
     return num
 
-def process_one_client():
+def data() -> list:
     """
-    Creates one client, encrypts, decrypts and processes that data into json files.
-    :return: None
-    """
-    create_one_client()
-    encrypt_json()
-    decrypt_json()
+    Create and return the program configuration data.
+    The returned list contains file paths, limits, encoding settings,
+    and formatting options used throughout the application.
 
-def process_multiple_clients():
+    :return: A list containing application configuration values.
+    :rtype: list
     """
-    Asks the user for the total number of clients (>1).
-    If the input is invalid, it creates their data. Otherwise, it displays and invalid input message
-    :return: None
+    #0
+    first_name_list = 'data/first_name.txt'
+    #1
+    surname_list = 'data/surname.txt'
+    #2
+    one_client_output = 'data/data_one_client.json'
+    #3
+    several_clients_output = 'data/data_several_clients.json'
+    #4
+    encrypt_output = 'data/data_client_encrypted.json'
+    #5
+    decrypt_output = 'data/data_client_decrypted.json'
+    #6
+    medicine_list = 'data/medicamentos.txt'
+    #7
+    excel = 'data/matrix.xlsx'
+    #8
+    ssn_min_value = 1000
+    #9
+    ssn_max_value = 1000000
+    #10
+    min_medicine_num = 3
+    #11
+    max_medicine_num = 5
+    #12
+    max_danger_value = 6
+    #13
+    encode = 'utf-8'
+    #14
+    indent = 2
+
+    return [first_name_list, surname_list, one_client_output, several_clients_output, encrypt_output,
+            decrypt_output, medicine_list, excel, ssn_min_value, ssn_max_value,min_medicine_num, max_medicine_num,
+            max_danger_value, encode, indent]
+
+def ask_number_of_clients() -> int:
     """
-    try:
-        number_clients = int(input('\nHow many clients would you like to create? (>1) '))
-        if number_clients > 1:
-            create_several_clients(number_clients)
-        else:
+    Prompt the user for the number of clients to create.
+    The function keeps requesting input until the user enters
+    a valid integer greater than 1.
+
+    :return: Number of clients to generate.
+    :rtype: int
+    """
+    while True:
+        try:
+            number = int(input('\nHow many clients would you like to create? (>1) '))
+            if number > 1:
+                return number
+            else:
+                print(invalid)
+        except ValueError:
             print(invalid)
-    except ValueError:
-        print(invalid)
+
+def process_one_client(data:list) -> None:
+    """
+    Generate, encrypt, and decrypt data for a single client.
+
+    :param data: Configuration and data source list used for generation.
+    :type data: list
+    :return: None
+    :rtype: None
+    """
+    create_one_client(data)
+    encrypt_json(data[2], data[4], data[13], data[14])
+    decrypt_json(data[4], data[5], data[13], data[14])
+    return None
+
+def process_multiple_clients(number_of_clients:int, data:list) -> dict:
+    """
+    Generate data for multiple clients.
+
+    :param number_of_clients: Number of clients to generate.
+    :type number_of_clients: int
+    :param data: Configuration and data source list used for generation.
+    :type data: list
+    :return: Dictionary containing the generated client data.
+    :rtype: dict
+    """
+    return create_several_clients(number_of_clients, data)
 
 def main():
     """
-    Main function of the program.
-    Displays the menu in a continuous loop and, based on user input, it executes the following actions:
-    Option 1: Processes one client
-    Option 2: Processes multiple clients
-    Option 0: Exit
-    If the user input is invalid, it displays invalid input message
+    Run the main application loop.
+    Displays the menu and processes user commands for creating
+    single or multiple clients until the user exits the program.
+
     :return: None
+    :rtype: None
     """
     while True:
-        num = menu()
-        if num == '1':
-            process_one_client()
-        elif num == '2':
-            process_multiple_clients()
-        elif num == '0':
+        option = menu()
+        if option == '1':
+            process_one_client(data())
+
+        elif option == '2':
+            number_of_clients = ask_number_of_clients()
+            process_multiple_clients(number_of_clients, data())
+        elif option == '0':
             print('\nThank you for using this program')
             break
         else:
             print(invalid)
 
-main()
+if __name__ == '__main__':
+    main()
