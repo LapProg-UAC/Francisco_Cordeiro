@@ -1,6 +1,8 @@
 import random, sys
 from itertools import combinations
-from generate_matrix import create_list, generate_matrix, create_excel_file
+from file_manager import read_txt
+from generate_matrix import generate_matrix, create_excel_file
+
 
 def generate_prescription(data:list) -> tuple:
     """
@@ -16,7 +18,7 @@ def generate_prescription(data:list) -> tuple:
     :rtype: tuple
     :raises SystemExit: If 'min_medicine_num' is greater than 'max_medicine_num'.
     """
-    medicine_list = create_list(data[6], data[13])
+    medicine_list = read_txt(data[6], data[13])
     matrix = generate_matrix(medicine_list, data[12])
     create_excel_file(matrix, data[7])
 

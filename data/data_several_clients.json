@@ -1,25 +1,135 @@
 {
   "Client #1": {
-    "Name": "Olivia Alvarez",
-    "SSN": "313101",
+    "Name": "Nina Rivera",
+    "SSN": "373783",
     "Prescription": [
-      "Meprobamato",
-      "Tiazidas",
       "Colestiramina",
-      "Sulfimpirazona"
+      "Cefaloridina (Ceporan)",
+      "Ácido Acetilsalicílico"
     ],
-    "Danger": 18
+    "Danger": 9
   },
   "Client #2": {
-    "Name": "Aria Alvarez",
-    "SSN": "402086",
+    "Name": "Marcus Chen",
+    "SSN": "15408",
     "Prescription": [
+      "Tiroxina",
+      "Ácido Mefenâmico",
+      "Metildopa",
+      "Analgésicos Narcóticos"
+    ],
+    "Danger": 15
+  },
+  "Client #3": {
+    "Name": "Julian Kim",
+    "SSN": "742986",
+    "Prescription": [
+      "Ácido Ectacrínico",
+      "Isoniazida",
+      "Fenfluramina"
+    ],
+    "Danger": 10
+  },
+  "Client #4": {
+    "Name": "Thomas Novak",
+    "SSN": "467506",
+    "Prescription": [
+      "Quinidina",
+      "Dicloralfenazona",
+      "Clonidina",
+      "Levodopa"
+    ],
+    "Danger": 22
+  },
+  "Client #5": {
+    "Name": "Leo Kim",
+    "SSN": "759412",
+    "Prescription": [
+      "Fenotiazinas (Clorpromazina)",
+      "Biguanidas (Fenformina)",
+      "Naproxeno",
+      "Sulfimpirazona"
+    ],
+    "Danger": 31
+  },
+  "Client #6": {
+    "Name": "Alex Martinez",
+    "SSN": "188746",
+    "Prescription": [
+      "Guanetidina",
+      "Tiroxina",
+      "Fenotiazinas (Clorpromazina)",
+      "Analgésicos Narcóticos"
+    ],
+    "Danger": 22
+  },
+  "Client #7": {
+    "Name": "Maya Martinez",
+    "SSN": "235078",
+    "Prescription": [
+      "Sulfimpirazona",
       "Metronidazol",
-      "Meprobamato",
-      "Piridoxina",
-      "Tiazidas",
-      "Anticolinérgicos"
+      "Insulinas",
+      "Anti-histamínicos",
+      "Esteróides Anabólicos"
     ],
     "Danger": 35
+  },
+  "Client #8": {
+    "Name": "Ethan Alvarez",
+    "SSN": "595272",
+    "Prescription": [
+      "Procainamida",
+      "Anticolinérgicos",
+      "Dicloralfenazona",
+      "Haloperidol",
+      "Meprobamato"
+    ],
+    "Danger": 31
+  },
+  "Client #9": {
+    "Name": "Sofia Thompson",
+    "SSN": "546540",
+    "Prescription": [
+      "Bloqueadores adrenérgicos beta",
+      "Clofibrato",
+      "Ácido Mefenâmico",
+      "Levodopa",
+      "Metotrexato"
+    ],
+    "Danger": 33
+  },
+  "Client #10": {
+    "Name": "Olivia Novak",
+    "SSN": "636302",
+    "Prescription": [
+      "Hidrato de Cloral",
+      "Metildopa",
+      "Ácido Mefenâmico"
+    ],
+    "Danger": 15
+  },
+  "Client #11": {
+    "Name": "Alex Chen",
+    "SSN": "583406",
+    "Prescription": [
+      "Carbamazepina",
+      "Fenitoína",
+      "Griseofulvina",
+      "Fenilbutazona",
+      "Esteróides Anabólicos"
+    ],
+    "Danger": 41
+  },
+  "Client #12": {
+    "Name": "Priya Rivera",
+    "SSN": "305642",
+    "Prescription": [
+      "Esteróides Anabólicos",
+      "Metotrexato",
+      "Griseofulvina",
+      "Antidepressivos Tricíclicos"
+    ],
+    "Danger": 22
   }
 }

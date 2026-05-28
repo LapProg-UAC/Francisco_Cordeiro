@@ -1,7 +1,7 @@
 import random, sys
 from encrypt import write_json
 from prescription import generate_prescription
-from generate_matrix import create_list
+from file_manager import read_txt
 
 
 def load_name_list(first_name_filename:str, encode:str) -> list:
@@ -15,7 +15,7 @@ def load_name_list(first_name_filename:str, encode:str) -> list:
     :return: A list of first names.
     :rtype: list
     """
-    return create_list(first_name_filename, encode)
+    return read_txt(first_name_filename, encode)
 
 def load_surname_list(surname_filename:str,encode:str) -> list:
     """
@@ -28,7 +28,7 @@ def load_surname_list(surname_filename:str,encode:str) -> list:
     :return: A list of surnames.
     :rtype: list
     """
-    return create_list(surname_filename, encode)
+    return read_txt(surname_filename, encode)
 
 def create_full_name(first_name_list:list, surname_list:list) -> str:
     """
@@ -38,7 +38,7 @@ def create_full_name(first_name_list:list, surname_list:list) -> str:
     :type first_name_list: list
     :param surname_list: List of available surnames.
     :type surname_list: list
-    :returns: A randomly generated full name.
+    :return: A randomly generated full name.
     :rtype: str
     """
     return (random.choice(first_name_list) + ' ' + random.choice(surname_list))
@@ -65,7 +65,7 @@ def generate_client_info(data:list) -> tuple:
 
     :param data: Configuration and data source list used for generation.
     :type data: list
-    :returns: A tuple containing the client's full name and SSN.
+    :return: A tuple containing the client's full name and SSN.
     :rtype: tuple
     """
     return (create_full_name(load_name_list(data[0], data[13]), load_surname_list(data[1], data[13])),
@@ -77,7 +77,7 @@ def create_one_client(data:list) -> dict:
 
     :param data: Configuration and data source list used for generation.
     :type data: list
-    :returns: A dictionary containing the generated client information.
+    :return: A dictionary containing the generated client information.
     :rtype: dict
     """
     name, ssn = generate_client_info(data)
@@ -99,7 +99,7 @@ def create_several_clients(number_of_clients:int, data:list) -> dict:
     :type number_of_clients: int
     :param data: Configuration and data source list used for generation.
     :type data: list
-    :returns: A dictionary containing all generated clients.
+    :return: A dictionary containing all generated clients.
     :rtype: dict
     """
     clients = {}
@@ -117,4 +117,72 @@ def create_several_clients(number_of_clients:int, data:list) -> dict:
 
     write_json(data[3], clients, data[13], data[14])
     return clients
+
+def get_client_by_ssn(clients: dict, ssn: str) -> dict | None:
+    """
+    Return a single client (utente) based on their SSN using a higher-order function.
+
+    The function searches through all clients and returns the first match
+    where the SSN matches the provided value.
+
+    :param clients: Dictionary of all clients.
+    :type clients: dict
+    :param ssn: SSN of the client to search for.
+    :type ssn: str
+    :return: The client dictionary if found, otherwise None.
+    :rtype: dict | None
+    """
+    return next(filter(lambda c: c["SSN"] == ssn, clients.values()), None)
+
+def get_clients_by_ssn_range(clients: dict, min_ssn_search_value: int, max_ssn_search_value: int) -> list:
+    """
+    Return a list of clients whose SSN is within a given range [min_ssn_search_value, max_ssn_search_value]
+    using a higher-order function.
+
+    :param clients: Dictionary of all clients.
+    :type clients: dict
+    :param min_ssn_search_value: Minimum SSN value.
+    :type min_ssn_search_value: int
+    :param max_ssn_search_value: Maximum SSN value.
+    :type max_ssn_search_value: int
+    :return: List of clients whose SSN is within the given range.
+    :rtype: list
+    """
+    return list(filter(lambda c: min_ssn_search_value <= int(c["SSN"]) <= max_ssn_search_value, clients.values()))
+
+def get_prescriptions_by_ssn(clients: dict, ssn: str) -> list | None:
+    """
+    Return the prescription(s) associated with a specific client using SSN.
+
+    This function uses higher-order functions to locate the client and
+    extract their prescription data.
+
+    :param clients: Dictionary of all clients.
+    :type clients: dict
+    :param ssn: SSN of the client.
+    :type ssn: str
+    :return: List of prescriptions or None if client is not found.
+    :rtype: list | None
+    """
+    client = next(filter(lambda c: c["SSN"] == ssn, clients.values()), None)
+    return client["Prescription"] if client else None
+
+def get_prescriptions_by_ssn_range(clients: dict, min_ssn_search_value: int, max_ssn_search_value: int) -> list:
+    """
+    Return all prescriptions from clients whose SSN is within a given range.
+
+    This function combines filter + map to first select clients in the range
+    and then extract their prescriptions.
+
+    :param clients: Dictionary of all clients.
+    :type clients: dict
+    :param min_ssn_search_value: Minimum SSN value.
+    :type min_ssn_search_value: int
+    :param max_ssn_search_value: Maximum SSN value.
+    :type max_ssn_search_value: int
+    :return: List of prescriptions from matching clients.
+    :rtype: list
+    """
+    return list(map(lambda c: c["Prescription"],
+                    filter(lambda c: min_ssn_search_value <= int(c["SSN"]) <= max_ssn_search_value, clients.values())))
 

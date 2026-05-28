@@ -1,4 +1,6 @@
 import json, sys
+from file_manager import read_json, write_json
+
 
 def encryption(phrase) -> str:
     """
@@ -84,7 +86,7 @@ def encryption_number(ssn_number:str) -> str:
 
     :param ssn_number: The SSN string to encrypt.
     :type ssn_number: str
-    :returns: The encrypted SSN string.
+    :return: The encrypted SSN string.
     :rtype: str
     """
     encrypted_ssn_number = ''
@@ -94,6 +96,25 @@ def encryption_number(ssn_number:str) -> str:
             new = new - 10
         encrypted_ssn_number += chr(new)
     return encrypted_ssn_number
+
+def decryption_number(ssn_number:str) -> str:
+    """
+    Decrypt a numeric SSN string encrypted with a Caesar-style digit shift.
+    Each digit is shifted backward by 3. Values below '0' wrap
+    around to the end of the digit range.
+
+    :param ssn_number: The encrypted SSN string.
+    :type ssn_number: str
+    :return: The decrypted SSN string.
+    :rtype: str
+    """
+    decrypted_ssn_number = ''
+    for i in ssn_number:
+        new = ord(i) - 3
+        if new < 48:
+            new = new + 10
+        decrypted_ssn_number += chr(new)
+    return decrypted_ssn_number
 
 def encrypt_json(filename_input:str, filename_output:str, encode:str, indent:int) -> None:
     """
@@ -107,7 +128,7 @@ def encrypt_json(filename_input:str, filename_output:str, encode:str, indent:int
     :type encode: str
     :param indent: Indentation level for JSON formatting.
     :type indent: int
-    :returns: None
+    :return: None
     :raises SystemExit: If the input file cannot be found.
     """
     try:
@@ -118,25 +139,6 @@ def encrypt_json(filename_input:str, filename_output:str, encode:str, indent:int
         return None
     except FileNotFoundError:
         sys.exit(f'Fatal Error: File "{filename_input}" not found.')
-
-def decryption_number(ssn_number:str) -> str:
-    """
-    Decrypt a numeric SSN string encrypted with a Caesar-style digit shift.
-    Each digit is shifted backward by 3. Values below '0' wrap
-    around to the end of the digit range.
-
-    :param ssn_number: The encrypted SSN string.
-    :type ssn_number: str
-    :returns: The decrypted SSN string.
-    :rtype: str
-    """
-    decrypted_ssn_number = ''
-    for i in ssn_number:
-        new = ord(i) - 3
-        if new < 48:
-            new = new + 10
-        decrypted_ssn_number += chr(new)
-    return decrypted_ssn_number
 
 def decrypt_json(filename_input:str, filename_output:str, encode:str, indent:int) -> None:
     """
@@ -150,7 +152,7 @@ def decrypt_json(filename_input:str, filename_output:str, encode:str, indent:int
     :type encode: str
     :param indent: Indentation level for JSON formatting.
     :type indent: int
-    :returns: None
+    :return: None
     :raises SystemExit: If the input file cannot be found.
     """
     try:
@@ -162,34 +164,3 @@ def decrypt_json(filename_input:str, filename_output:str, encode:str, indent:int
     except FileNotFoundError:
         sys.exit(f'Fatal Error: File "{filename_input}" not found.')
 
-def read_json(filename:str, encode:str) -> dict:
-    """
-    Read and load data from a JSON file.
-
-    :param filename: Path to the JSON file.
-    :type filename: str
-    :param encode: File encoding used to read the file.
-    :type encode: str
-    :returns: Parsed JSON data as a dictionary.
-    :rtype: dict
-    """
-    with open(filename, 'r', encoding=encode) as json_file:
-        return json.load(json_file)
-
-def write_json(filename_output:str, client_data:dict, encode:str, indent:int) -> None:
-    """
-    Write dictionary data to a JSON file.
-
-    :param filename_output: Path to the output JSON file.
-    :type filename_output: str
-    :param client_data: Dictionary containing client data.
-    :type client_data: dict
-    :param encode: File encoding used to write the file.
-    :type encode: str
-    :param indent: Indentation level for JSON formatting.
-    :type indent: int
-    :returns: None
-    """
-    with open(filename_output, 'w', encoding=encode) as json_file:
-        json.dump(client_data, json_file, ensure_ascii=False, indent=indent)
-        return None

@@ -1,25 +1,6 @@
-import random, sys
+import random
 import pandas as pd
 
-
-def create_list(filename:str, encode:str) -> list:
-    """
-    Create a list from the contents of a text file.
-    Each line in the file is stored as an element in the returned list.
-
-    :param filename: Path to the input file.
-    :type filename: str
-    :param encode: File encoding to use when reading the file.
-    :type encode: str
-    :return: A list containing the lines of the file.
-    :rtype: list
-    :raises SystemExit: If the file does not exist.
-    """
-    try:
-        with open(filename, "r", encoding=encode) as file:
-            return file.read().splitlines()
-    except FileNotFoundError:
-        sys.exit(f'Fatal Error: File "{filename}" not found.')
 
 def generate_matrix(medicine_list:list, max_danger_value) -> list:
     """
@@ -32,8 +13,7 @@ def generate_matrix(medicine_list:list, max_danger_value) -> list:
     :type medicine_list: list
     :param max_danger_value: Maximum random danger value allowed.
     :type max_danger_value: int
-    :return: A list of tuples containing row medicine, column medicine,
-             and danger value.
+    :return: A list of tuples containing row medicine, column medicine, and danger value.
     :rtype: list
     """
     matrix = []

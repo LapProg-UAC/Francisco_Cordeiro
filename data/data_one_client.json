@@ -1,12 +1,12 @@
 {
-  "Name": "Samuel Martinez",
-  "SSN": "989922",
+  "Name": "Aria Singh",
+  "SSN": "210036",
   "Prescription": [
-    "Procainamida",
-    "Naproxeno",
-    "Guanetidina",
-    "Insulinas",
-    "Tiazidas"
+    "Biguanidas (Fenformina)",
+    "Furosemida",
+    "Metildopa",
+    "Indometacina",
+    "Colestiramina"
   ],
-  "Danger": 35
+  "Danger": 38
 }

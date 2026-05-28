@@ -1,21 +1,25 @@
 from encrypt import encrypt_json, decrypt_json
-from create_client import create_one_client, create_several_clients
+from create_client import (create_one_client, create_several_clients, get_client_by_ssn,
+                           get_clients_by_ssn_range, get_prescriptions_by_ssn, get_prescriptions_by_ssn_range)
 
-invalid = '\nPlease enter a valid number'
 
 def menu() -> str:
     """
     Display the main menu and get the user's option.
 
-    :returns: The selected menu option.
+    :return: The selected menu option.
     :rtype: str
     """
     print('\nWelcome')
     print('\n[1] Create one client')
     print('[2] Create several clients')
+    print('[3] Get client by SSN')
+    print('[4] Get clients by SSN range')
+    print('[5] Get prescriptions by SSN')
+    print('[6] Get prescriptions by SSN range')
     print('[0] Exit')
-    num = input('\nWhat would you like to do? ')
-    return num
+
+    return input('\nWhat would you like to do? ')
 
 def data() -> list:
     """
@@ -61,6 +65,14 @@ def data() -> list:
             decrypt_output, medicine_list, excel, ssn_min_value, ssn_max_value,min_medicine_num, max_medicine_num,
             max_danger_value, encode, indent]
 
+def ask_ssn() -> str:
+    return input("Enter SSN: ")
+
+def ask_range() -> tuple:
+    x = int(input("Enter minimum SSN: "))
+    y = int(input("Enter maximum SSN: "))
+    return x, y
+
 def ask_number_of_clients() -> int:
     """
     Prompt the user for the number of clients to create.
@@ -76,11 +88,11 @@ def ask_number_of_clients() -> int:
             if number > 1:
                 return number
             else:
-                print(invalid)
+                print('\nPlease enter a valid number')
         except ValueError:
-            print(invalid)
+            print('\nPlease enter a valid number')
 
-def process_one_client(data:list) -> None:
+def process_one_client(data:list) -> dict:
     """
     Generate, encrypt, and decrypt data for a single client.
 
@@ -89,10 +101,10 @@ def process_one_client(data:list) -> None:
     :return: None
     :rtype: None
     """
-    create_one_client(data)
+    client = create_one_client(data)
     encrypt_json(data[2], data[4], data[13], data[14])
     decrypt_json(data[4], data[5], data[13], data[14])
-    return None
+    return client
 
 def process_multiple_clients(number_of_clients:int, data:list) -> dict:
     """
@@ -108,27 +120,40 @@ def process_multiple_clients(number_of_clients:int, data:list) -> dict:
     return create_several_clients(number_of_clients, data)
 
 def main():
-    """
-    Run the main application loop.
-    Displays the menu and processes user commands for creating
-    single or multiple clients until the user exits the program.
+    clients = {}
 
-    :return: None
-    :rtype: None
-    """
     while True:
         option = menu()
+
         if option == '1':
             process_one_client(data())
 
         elif option == '2':
             number_of_clients = ask_number_of_clients()
-            process_multiple_clients(number_of_clients, data())
+            clients = process_multiple_clients(number_of_clients, data())
+
+        elif option == '3':
+            ssn = ask_ssn()
+            print(get_client_by_ssn(clients, ssn))
+
+        elif option == '4':
+            x, y = ask_range()
+            print(get_clients_by_ssn_range(clients, x, y))
+
+        elif option == '5':
+            ssn = ask_ssn()
+            print(get_prescriptions_by_ssn(clients, ssn))
+
+        elif option == '6':
+            x, y = ask_range()
+            print(get_prescriptions_by_ssn_range(clients, x, y))
+
         elif option == '0':
             print('\nThank you for using this program')
             break
+
         else:
-            print(invalid)
+            print('\nPlease enter a valid number')
 
 if __name__ == '__main__':
     main()
